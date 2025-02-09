@@ -6,7 +6,7 @@ package projeto_java_interface.conexao;
 
 /**
  *
- * @author Luís
+ * @author Eduarda
  */
 class stmt {
     
