@@ -6,7 +6,7 @@ package projeto_java_interface.DAO;
 
 /**
  *
- * @author Luís
+ * @author Eduarda
  */
 public class UsuarioDAO {
     
