@@ -6,6 +6,8 @@ package projeto_java_interface;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import projeto_java_interface.DAO.ContatoDAO;
+import projeto_java_interface.classes.Contato;
 
 /**
  *
@@ -15,9 +17,11 @@ public class Home extends javax.swing.JFrame {
 
     /**
      * Creates new form Home
-     */private int cont = 1;
+     */
+    private int idUsuario = 1;
     public Home() {
-        initComponents();
+       initComponents();
+       preencheTabela();
     }
 
     /**
@@ -163,20 +167,29 @@ public class Home extends javax.swing.JFrame {
 
         tbTabela.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Eduarda", "2323-2323", "eduarda@gmail.com", "01/01/2001"},
-                {"Dario", "2324-2424", "dario@gmail.com", "01/02/1978"},
-                {"Luis", "2222-2222", "luis@gmail.com", "01/03/2000"}
+
             },
             new String [] {
-                "Nome", "Telefone", "E-mail", "Nascimento"
+                "ID", "Nome", "Telefone", "E-mail", "Nascimento"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tbTabela.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbTabelaMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tbTabela);
+        if (tbTabela.getColumnModel().getColumnCount() > 0) {
+            tbTabela.getColumnModel().getColumn(0).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -273,7 +286,21 @@ public class Home extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    public void preencheTabela(){
+        DefaultTableModel modelo = (DefaultTableModel) tbTabela.getModel();
+        modelo.setNumRows(0);
+        ContatoDAO cdao = new ContatoDAO();
+        
+        for (Contato c: cdao.lerBanco()) {
+            modelo.addRow(new Object[]{
+                c.getId(),                  
+                c.getNome(),
+                c.getTelefone(),
+                c.getEmail(),
+                c.getDataAniversario()
+            });
+        }
+    }
     private void txtNascimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNascimentoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNascimentoActionPerformed
@@ -292,17 +319,32 @@ public class Home extends javax.swing.JFrame {
 
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel tbModel = (DefaultTableModel)tbTabela.getModel();
-        tbModel.addRow(new Object[] {txtNome.getText(), txtTelefone.getText(),
-        txtEmail.getText(), txtNascimento.getText()});    
+        Contato c = new Contato();
+        ContatoDAO cdao= new ContatoDAO();
+        c.setIdUsuario(1);
+        c.setNome(txtNome.getText());
+        c.setTelefone(txtTelefone.getText());
+        c.setEmail(txtEmail.getText());
+        c.setDataAniversario(txtNascimento.getText());
+        cdao.inserirBanco(c);
+        preencheTabela();
+        txtNome.setText("");
+        txtTelefone.setText("");
+        txtEmail.setText("");
+        txtNascimento.setText(""); 
     }//GEN-LAST:event_btSalvarActionPerformed
 
     private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
         // TODO add your handling code here:
         DefaultTableModel tbModel = (DefaultTableModel)tbTabela.getModel();
-
+        Contato c = new Contato();
+        ContatoDAO cdao= new ContatoDAO();
+        
         if(tbTabela.getSelectedRow() != -1){
-            tbModel.removeRow(tbTabela.getSelectedRow());
+            c.setId((int)tbTabela.getValueAt(tbTabela.getSelectedRow(),0));
+            c.setIdUsuario(idUsuario);
+            cdao.deletarNoBanco(c);
+            preencheTabela();
         }
         else{
             JOptionPane.showMessageDialog(null, "Selecione uma linha para excluir");
@@ -312,24 +354,30 @@ public class Home extends javax.swing.JFrame {
     private void btAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAtualizarActionPerformed
         // TODO add your handling code here:
         if(tbTabela.getSelectedRow() != -1){
-        
-            tbTabela.setValueAt(txtNome.getText(), tbTabela.getSelectedRow(), 0);
-            tbTabela.setValueAt(txtTelefone.getText(), tbTabela.getSelectedRow(), 1);
-            tbTabela.setValueAt(txtEmail.getText(), tbTabela.getSelectedRow(), 2);
-            tbTabela.setValueAt(txtNascimento.getText(), tbTabela.getSelectedRow(), 3);
-   
-   
+        Contato c = new Contato();
+        ContatoDAO cdao= new ContatoDAO();
+        c.setId((int)tbTabela.getValueAt(tbTabela.getSelectedRow(), 0));
+        c.setNome(txtNome.getText());
+        c.setTelefone(txtTelefone.getText());
+        c.setEmail(txtEmail.getText());
+        c.setDataAniversario(txtNascimento.getText());
+        cdao.atualizarBanco(c);
+        preencheTabela();
+        txtNome.setText("");
+        txtTelefone.setText("");
+        txtEmail.setText("");
+        txtNascimento.setText("");
         }else {
-                JOptionPane.showMessageDialog(null,"Selecione uma linha para atualizar");        
+                JOptionPane.showMessageDialog(null,"Selecione uma alinha para atualizar");        
         }
     }//GEN-LAST:event_btAtualizarActionPerformed
 
     private void tbTabelaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbTabelaMouseClicked
         // TODO add your handling code here:
-        txtNome.setText(tbTabela.getValueAt(tbTabela.getSelectedRow(), 0).toString());
-        txtTelefone.setText(tbTabela.getValueAt(tbTabela.getSelectedRow(), 1).toString());
-        txtEmail.setText(tbTabela.getValueAt(tbTabela.getSelectedRow(), 2).toString());
-        txtNascimento.setText(tbTabela.getValueAt(tbTabela.getSelectedRow(), 3).toString());
+        txtNome.setText(tbTabela.getValueAt(tbTabela.getSelectedRow(), 1).toString());
+        txtTelefone.setText(tbTabela.getValueAt(tbTabela.getSelectedRow(), 2).toString());
+        txtEmail.setText(tbTabela.getValueAt(tbTabela.getSelectedRow(), 3).toString());
+        txtNascimento.setText(tbTabela.getValueAt(tbTabela.getSelectedRow(), 4).toString());
     }//GEN-LAST:event_tbTabelaMouseClicked
 
     /**
@@ -366,7 +414,6 @@ public class Home extends javax.swing.JFrame {
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAtualizar;
     private javax.swing.JButton btExcluir;
@@ -387,4 +434,8 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtTelefone;
     // End of variables declaration//GEN-END:variables
+
+    private void preecheTabela() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

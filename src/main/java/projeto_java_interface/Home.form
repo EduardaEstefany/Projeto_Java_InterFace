@@ -275,31 +275,21 @@
             <Component class="javax.swing.JTable" name="tbTabela">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="4" rowCount="3">
-                    <Column editable="true" title="Nome" type="java.lang.Object">
-                      <Data value="Eduarda"/>
-                      <Data value="Dario"/>
-                      <Data value="Luis"/>
-                    </Column>
-                    <Column editable="true" title="Telefone" type="java.lang.Object">
-                      <Data value="2323-2323"/>
-                      <Data value="2324-2424"/>
-                      <Data value="2222-2222"/>
-                    </Column>
-                    <Column editable="true" title="E-mail" type="java.lang.Object">
-                      <Data value="eduarda@gmail.com"/>
-                      <Data value="dario@gmail.com"/>
-                      <Data value="luis@gmail.com"/>
-                    </Column>
-                    <Column editable="true" title="Nascimento" type="java.lang.Object">
-                      <Data value="01/01/2001"/>
-                      <Data value="01/02/1978"/>
-                      <Data value="01/03/2000"/>
-                    </Column>
+                  <Table columnCount="5" rowCount="0">
+                    <Column editable="false" title="ID" type="java.lang.Object"/>
+                    <Column editable="true" title="Nome" type="java.lang.Object"/>
+                    <Column editable="true" title="Telefone" type="java.lang.Object"/>
+                    <Column editable="true" title="E-mail" type="java.lang.Object"/>
+                    <Column editable="true" title="Nascimento" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="0">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                       <Title/>
                       <Editor/>
